@@ -343,15 +343,16 @@ StatusCode CreateODDCells::initialize() {
               decoder->set(volumeId, "slice", idOfSlice);
               decoder->set(volumeId, "x", firstCellX + int(ix));
               decoder->set(volumeId, "y", firstCellY + int(iy));
-              // write to ROOT file
+              // write to ROOT file (in mm)
+              eta = centre.eta();
               phi = centre.phi();
-              r = centre.rho();
+              r = centre.rho() / CLHEP::mm;
               dphi = 2 * abs(edgePhiLow.phi() - phi);
-              dr = 2 * abs(edgeRLow.rho() - r);
-              dz = 2 * (outGlobalEdgeY[2] - outGlobalCentre[2]);
-              x = outGlobalCentre[0];
-              y = outGlobalCentre[1];
-              z = outGlobalCentre[2];
+              dr = 2 * abs(edgeRLow.rho() / CLHEP::mm - r);
+              dz = 2 * (outGlobalEdgeY[2] - outGlobalCentre[2]) / CLHEP::mm;
+              x = outGlobalCentre[0] / CLHEP::mm;
+              y = outGlobalCentre[1] / CLHEP::mm;
+              z = outGlobalCentre[2] / CLHEP::mm;
               tree.Fill();
               if (msgLevel() == MSG::DEBUG) {
                 // write to txt file for debug (vis) purposes)
@@ -474,16 +475,16 @@ StatusCode CreateODDCells::initialize() {
               decoder->set(volumeId, "slice", idOfSlice);
               decoder->set(volumeId, "x", firstCellX + int(ix));
               decoder->set(volumeId, "z", firstCellY + int(iz));
-              // write to ROOT file
+              // write to ROOT file (in mm)
               eta = centre.eta();
               phi = centre.phi();
-              r = centre.rho();
+              r = centre.rho() / CLHEP::mm;
               dphi = 2 * abs(edgePhiLow.phi() - phi);
-              dr = 2 * abs(edgeRLow.rho() - r);
-              dz = 2 * (outGlobalEdgeY[2] - outGlobalCentre[2]);
-              x = outGlobalCentre[0];
-              y = outGlobalCentre[1];
-              z = outGlobalCentre[2];
+              dr = 2 * abs(edgeRLow.rho() / CLHEP::mm - r);
+              dz = 2 * (outGlobalEdgeY[2] - outGlobalCentre[2]) / CLHEP::mm;
+              x = outGlobalCentre[0] / CLHEP::mm;
+              y = outGlobalCentre[1] / CLHEP::mm;
+              z = outGlobalCentre[2] / CLHEP::mm;
               tree.Fill();
               if (msgLevel() == MSG::DEBUG) {
                 // write to txt file for debug (vis) purposes)
