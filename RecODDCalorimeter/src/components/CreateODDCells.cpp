@@ -106,13 +106,13 @@ StatusCode CreateODDCells::initialize() {
   TTree tree("cells", "Tree with list of cells");
   dd4hep::DDSegmentation::CellID volumeId;
   int layer;
-  bool isBarrel, isCylindrical, isECCylindrical, isCartesian;
+  bool isBarrel, isCylindrical, isECCylindricalRPhiZ, isCartesian;
   double eta, phi, r, x, y, z, deta, dphi, dr, dx, dy, dz;
   tree.Branch("id", &volumeId, "id/l");
   tree.Branch("layer", &layer, "layer/i");
   tree.Branch("isBarrel", &isBarrel, "isBarrel/b");
   tree.Branch("isCylindrical", &isCylindrical, "isCylindrical/b");
-  tree.Branch("isECCylindrical", &isECCylindrical, "isECCylindrical/b");
+  tree.Branch("isECCylindricalRPhiZ", &isECCylindricalRPhiZ, "isECCylindricalRPhiZ/b");
   tree.Branch("isCartesian", &isCartesian, "isCartesian/b");
   tree.Branch("eta", &eta, "eta/d");
   tree.Branch("phi", &phi, "phi/d");
@@ -133,7 +133,7 @@ StatusCode CreateODDCells::initialize() {
   for (uint iSys = 0; iSys < m_readoutNames.size(); iSys++) {
     isBarrel = m_isBarrel[iSys];
     isCylindrical = m_isCylindrical[iSys];
-    isECCylindrical = m_isECCylindrical[iSys];
+    isECCylindricalRPhiZ = m_isECCylindricalRPhiZ[iSys];
     isCartesian = m_isCartesian[iSys];
     // Check if readouts exist
     info() << "Readout: " << m_readoutNames[iSys] << endmsg;

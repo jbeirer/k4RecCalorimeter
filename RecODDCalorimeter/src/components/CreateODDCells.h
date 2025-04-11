@@ -38,21 +38,21 @@ private:
   SmartIF<IGeoSvc> m_geoSvc;
 
   /// Names of the detector readout for volumes
-  Gaudi::Property<std::vector<std::string>> m_readoutNames{this, "readoutNames", {"ECalBarrelCollection"}};
+  Gaudi::Property<std::vector<std::string>> m_readoutNames{this, "readoutNames", {"ECalBarrelCollection", "ECalEndcapCollection", "ECalEndcapCollection"}};
   /// Name of the volumes describing the top volume
-  Gaudi::Property<std::vector<std::string>> m_topVolumeNames{this, "topVolumeNames", {"ECalBarrel"}};
+  Gaudi::Property<std::vector<std::string>> m_topVolumeNames{this, "topVolumeNames", {"ECalBarrel", "ECalEndcap_endcap_0", "ECalEndcap_endcap_1"}};
   /// Readout descriptor of the volumes
-  Gaudi::Property<std::vector<unsigned long long>> m_topVolumeIdentifiers{this, "topVolumeIdentifiers", {16,279}};
+  Gaudi::Property<std::vector<unsigned long long>> m_topVolumeIdentifiers{this, "topVolumeIdentifiers", {16,273,529}}; // 16<<0, (17<<0)+(1<<8), (17<<0)+(2<<8)
   /// Names of the hierarchy of active volumes in geometry separated by ":" (e.g. layer)
-  Gaudi::Property<std::vector<std::string>> m_activeVolumeNames{this, "activeVolumeNames", {"stave_inner:layer:slice4"}};
+  Gaudi::Property<std::vector<std::string>> m_activeVolumeNames{this, "activeVolumeNames", {"stave_inner:layer:slice4", "stave_inner:layer:slice4", "stave_inner:layer:slice4"}};
   /// If the volume is a barrel: to store in ROOT file
-  Gaudi::Property<std::vector<bool>> m_isBarrel{this, "isBarrel", {true}};
+  Gaudi::Property<std::vector<bool>> m_isBarrel{this, "isBarrel", {true, false, false}};
   /// If the volume is described in eta-cylindrical coordinates ( = r, phi, eta): to store in ROOT file
-  Gaudi::Property<std::vector<bool>> m_isCylindrical{this, "isCylindrical", {true}};
-  /// If the volume is described in z-cylindrical coordinates ( = r, phi, z): to store in ROOT file
-  Gaudi::Property<std::vector<bool>> m_isECCylindrical{this, "isECCylindrical", {true}};
+  Gaudi::Property<std::vector<bool>> m_isCylindrical{this, "isCylindrical", {false, false, false}};
+  /// If the volume is described in eta-cylindrical coordinates ( = r, phi, z): to store in ROOT file
+  Gaudi::Property<std::vector<bool>> m_isECCylindricalRPhiZ{this, "isECCylindricalRPhiZ", {true, true, true}};
   /// If the volume is described in Cartesian coordinates ( = x, y, z): to store in ROOT file
-  Gaudi::Property<std::vector<bool>> m_isCartesian{this, "isCartesian", {true}};
+  Gaudi::Property<std::vector<bool>> m_isCartesian{this, "isCartesian", {false, false, false}};
   /// Name of output file
   std::string m_outputFileName;
 };

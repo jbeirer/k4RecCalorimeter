@@ -31,7 +31,7 @@ cells = CreateODDCells("cellsODD",
                        activeVolumeNames=["stave_inner:layer:slice4", "stave_inner:layer:slice4", "stave_inner:layer:slice4"],
                        isBarrel=[True, False, False],
                        isCylindrical=[False, False, False],
-                       isECCylindrical=[True, True, True],
+                       isECCylindricalRPhiZ = [True, True, True],
                        isCartesian=[False, False, False],
                        OutputLevel=INFO)
 
