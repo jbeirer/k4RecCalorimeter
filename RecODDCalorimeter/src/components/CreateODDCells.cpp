@@ -475,6 +475,7 @@ StatusCode CreateODDCells::initialize() {
               decoder->set(volumeId, "x", firstCellX + int(ix));
               decoder->set(volumeId, "z", firstCellY + int(iz));
               // write to ROOT file
+              eta = centre.eta();
               phi = centre.phi();
               r = centre.rho();
               dphi = 2 * abs(edgePhiLow.phi() - phi);
