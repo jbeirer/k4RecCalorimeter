@@ -481,7 +481,8 @@ StatusCode CreateODDCells::initialize() {
               r = centre.rho() * 10;
               dphi = 2 * abs(edgePhiLow.phi() - phi);
               dr = 2 * abs(edgeRLow.rho() * 10 - r);
-              dz = 2 * (outGlobalEdgeY[2] - outGlobalCentre[2]) * 10;
+              //dz = 2 * (outGlobalEdgeY[2] - outGlobalCentre[2]) * 10;
+              dz = 2 * (outGlobalEdgeZ[2] - outGlobalCentre[2]) * 10;
               x = outGlobalCentre[0] * 10;
               y = outGlobalCentre[1] * 10;
               z = outGlobalCentre[2] * 10;
