@@ -129,7 +129,6 @@ StatusCode CreateODDCells::initialize() {
 
   // First look up the top volume by name and verify if readout exists
   auto highestVol = gGeoManager->GetTopVolume();
-  int layerOffset = 0;
   for (uint iSys = 0; iSys < m_readoutNames.size(); iSys++) {
     isBarrel = m_isBarrel[iSys];
     isCylindrical = m_isCylindrical[iSys];
@@ -237,11 +236,16 @@ StatusCode CreateODDCells::initialize() {
     std::cout << decoder->valueString(m_topVolumeIdentifiers[iSys]) << std::endl;
     for (unsigned int imodule = 0; imodule < numVolumes[1]; imodule++) {
       for (unsigned int ilayer = 0; ilayer < numVolumes[numVolumes.size() - 2]; ilayer++) {
-        layer = ilayer + layerOffset;
         volumeId = m_topVolumeIdentifiers[iSys];
         decoder->set(volumeId, "module", imodule);
-        decoder->set(volumeId, "layer", ilayer + 1);
+        decoder->set(volumeId, "layer", ilayer);
         decoder->set(volumeId, "slice", 0);
+        // We set offset for endcap volumes to distinguish between barrel and endcap layers
+        if (isBarrel)
+          layer = ilayer;
+        else
+          layer = ilayer + numLayersThisReadout;
+
         // uncomment if we need only the slice volume (just active material, not a full layer)
         // decoder->set(volumeId, "slice", idOfSlice);
         // Get the position of the physical volume
@@ -481,7 +485,6 @@ StatusCode CreateODDCells::initialize() {
               r = centre.rho() * 10;
               dphi = 2 * abs(edgePhiLow.phi() - phi);
               dr = 2 * abs(edgeRLow.rho() * 10 - r);
-              //dz = 2 * (outGlobalEdgeY[2] - outGlobalCentre[2]) * 10;
               dz = 2 * (outGlobalEdgeZ[2] - outGlobalCentre[2]) * 10;
               x = outGlobalCentre[0] * 10;
               y = outGlobalCentre[1] * 10;
@@ -518,7 +521,6 @@ StatusCode CreateODDCells::initialize() {
         }
       }
     }
-    layerOffset += numLayersThisReadout;
     myfile.close();
   }
   file->Write();
