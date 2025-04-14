@@ -127,6 +127,11 @@ StatusCode CreateODDCells::initialize() {
   tree.Branch("dy", &dy, "dy/d");
   tree.Branch("dz", &dz, "dz/d");
 
+  // Initialize the cumulative layer count
+  unsigned int totalLayerCount = 0;
+  unsigned int ecalLayerCount = 0;
+  unsigned int hcalLayerCount = 0;
+  std::map<std::string, bool> barrelProcessed;
   // First look up the top volume by name and verify if readout exists
   auto highestVol = gGeoManager->GetTopVolume();
   for (uint iSys = 0; iSys < m_readoutNames.size(); iSys++) {
@@ -225,6 +230,25 @@ StatusCode CreateODDCells::initialize() {
 
     unsigned int numLayersThisReadout = numVolumes[numVolumes.size() - 2];
     std::cout << "Number of layers is " << numLayersThisReadout << std::endl;
+
+    std::string readoutType = m_readoutNames[iSys].substr(0, 4); // "ECal" or "HCal"
+
+    // First time we see this system type, set its starting layer
+    if (m_cumulativeLayerCount.find(readoutType) == m_cumulativeLayerCount.end()) {
+      m_cumulativeLayerCount[readoutType] = totalLayerCount;
+      info() << "First " << readoutType << " system starts at layer " << totalLayerCount << endmsg;
+    }
+
+    // Only increment the total count for first barrel or first endcap of each type
+    if (isBarrel && !barrelProcessed[readoutType]) {
+      totalLayerCount += numLayersThisReadout;
+      barrelProcessed[readoutType] = true;
+      info() << "After " << readoutType << " barrel, total layer count is " << totalLayerCount << endmsg;
+    } else if (!isBarrel && totalLayerCount < m_cumulativeLayerCount[readoutType] + numLayersThisReadout * 2) {
+      // Only count endcap once per system type
+      totalLayerCount += numLayersThisReadout;
+      info() << "After " << readoutType << " endcap, total layer count is " << totalLayerCount << endmsg;
+    }
     dd4hep::VolumeManager volMgr = dd4hep::Detector::getInstance().volumeManager();
     std::ofstream myfile;
     if (msgLevel() == MSG::DEBUG) {
@@ -240,11 +264,15 @@ StatusCode CreateODDCells::initialize() {
         decoder->set(volumeId, "module", imodule);
         decoder->set(volumeId, "layer", ilayer);
         decoder->set(volumeId, "slice", 0);
+
+        // Use the cumulative count to offset the layer number
         // We set offset for endcap volumes to distinguish between barrel and endcap layers
-        if (isBarrel)
-          layer = ilayer;
-        else
-          layer = ilayer + numLayersThisReadout;
+        if (isBarrel) {
+          layer = ilayer + m_cumulativeLayerCount[readoutType];
+        } else {
+          // For endcaps, start numbering after barrel
+          layer = ilayer + m_cumulativeLayerCount[readoutType] + numLayersThisReadout;
+        }
 
         // uncomment if we need only the slice volume (just active material, not a full layer)
         // decoder->set(volumeId, "slice", idOfSlice);
@@ -521,6 +549,9 @@ StatusCode CreateODDCells::initialize() {
         }
       }
     }
+    // At the end of the loop over readouts:
+    info() << "Final counts - ECal: " << ecalLayerCount << ", HCal: " << hcalLayerCount
+           << ", Total: " << totalLayerCount << endmsg;
     myfile.close();
   }
   file->Write();

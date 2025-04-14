@@ -37,6 +37,8 @@ private:
   /// Pointer to the geometry service
   SmartIF<IGeoSvc> m_geoSvc;
 
+  std::map<std::string, unsigned int> m_cumulativeLayerCount;
+  
   /// Names of the detector readout for volumes
   Gaudi::Property<std::vector<std::string>> m_readoutNames{this, "readoutNames", {"ECalBarrelCollection", "ECalEndcapCollection", "ECalEndcapCollection"}};
   /// Name of the volumes describing the top volume

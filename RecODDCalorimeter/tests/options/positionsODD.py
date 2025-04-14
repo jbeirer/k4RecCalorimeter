@@ -23,17 +23,57 @@ for det in detectors:
 geoservice.OutputLevel = WARNING
 
 from Configurables import CreateODDCells
+
 cells = CreateODDCells("cellsODD",
-                       outputFileName="ODD_cells.root",
-                       readoutNames=["ECalBarrelCollection", "ECalEndcapCollection", "ECalEndcapCollection"],
-                       topVolumeNames=["ECalBarrel", "ECalEndcap_endcap_0", "ECalEndcap_endcap_1"],
-                       topVolumeIdentifiers=[16,273,529], # 16<<0, (17<<0)+(1<<8), (17<<0)+(2<<8)
-                       activeVolumeNames=["stave_inner:layer:slice4", "stave_inner:layer:slice4", "stave_inner:layer:slice4"],
-                       isBarrel=[True, False, False],
-                       isCylindrical=[False, False, False],
-                       isECCylindricalRPhiZ = [True, True, True],
-                       isCartesian=[False, False, False],
-                       OutputLevel=INFO)
+    outputFileName="ODD_cells.root",
+    # Add both ECal and HCal readouts
+    readoutNames=[
+        "ECalBarrelCollection", "ECalEndcapCollection", "ECalEndcapCollection",
+        "HCalBarrelCollection", "HCalEndcapCollection", "HCalEndcapCollection"
+    ],
+    topVolumeNames=[
+        "ECalBarrel", "ECalEndcap_endcap_0", "ECalEndcap_endcap_1",
+        "HCalBarrel", "HCalEndcap_endcap_0", "HCalEndcap_endcap_1"
+    ],
+    # ID encoding from detector description XML:
+    # - System IDs: ECal barrel=16, ECal endcap=17, HCal barrel=19, HCal endcap=20
+    # - The barrel field (3 bits) is encoded by shifting values by 8 bits (<<8)
+    # - For barrel: barrel=0, for endcaps: endcap_0 has barrel=1, endcap_1 has barrel=2
+    # See xml/OpenDataDetectorIdentifiers.xml
+    topVolumeIdentifiers=[
+        16,                  # ECal barrel: system=16, barrel=0
+        17+(1<<8),           # ECal endcap_0: system=17, barrel=1
+        17+(2<<8),           # ECal endcap_1: system=17, barrel=2
+        19,                  # HCal barrel: system=19, barrel=0
+        20+(1<<8),           # HCal endcap_0: system=20, barrel=1
+        20+(2<<8)            # HCal endcap_1: system=20, barrel=2
+    ],
+    # Slices marked "sensitive" in XML are:
+    # ECal: stave_inner:layer:slice4
+    # HCal: stave_inner:layer:slice2 (Polystyrene is the third slice, index starts at 0)
+    activeVolumeNames=[
+        "stave_inner:layer:slice4", "stave_inner:layer:slice4", "stave_inner:layer:slice4",
+        "stave_inner:layer:slice2", "stave_inner:layer:slice2", "stave_inner:layer:slice2"
+    ],
+    isBarrel=[
+        True, False, False,
+        True, False, False
+    ],
+    isCylindrical=[
+        False, False, False,
+        False, False, False
+    ],
+    isECCylindricalRPhiZ=[
+        True, True, True,
+        True, True, True
+    ],
+    isCartesian=[
+        False, False, False,
+        False, False, False
+    ],
+    OutputLevel=INFO
+)
+
 
 ApplicationMgr(
 TopAlg = [     ],
