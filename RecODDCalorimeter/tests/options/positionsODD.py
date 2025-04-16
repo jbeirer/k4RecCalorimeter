@@ -59,17 +59,21 @@ cells = CreateODDCells("cellsODD",
         True, False, False,
         True, False, False
     ],
-    isCylindrical=[
+    isXYZ=[
         False, False, False,
         False, False, False
     ],
-    isECCylindricalRPhiZ=[
+    isEtaPhiR=[
+        False, False, False,
+        False, False, False
+    ],
+    isEtaPhiZ=[
+        False, False, False,
+        False, False, False
+    ],
+    isRPhiZ=[
         True, True, True,
         True, True, True
-    ],
-    isCartesian=[
-        False, False, False,
-        False, False, False
     ],
     OutputLevel=INFO
 )

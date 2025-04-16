@@ -106,14 +106,15 @@ StatusCode CreateODDCells::initialize() {
   TTree tree("cells", "Tree with list of cells");
   dd4hep::DDSegmentation::CellID volumeId;
   int layer;
-  bool isBarrel, isCylindrical, isECCylindricalRPhiZ, isCartesian;
+  bool isBarrel, isXYZ, isEtaPhiR, isEtaPhiZ, isRPhiZ;
   double eta, phi, r, x, y, z, deta, dphi, dr, dx, dy, dz;
   tree.Branch("id", &volumeId, "id/l");
   tree.Branch("layer", &layer, "layer/i");
   tree.Branch("isBarrel", &isBarrel, "isBarrel/b");
-  tree.Branch("isCylindrical", &isCylindrical, "isCylindrical/b");
-  tree.Branch("isECCylindricalRPhiZ", &isECCylindricalRPhiZ, "isECCylindricalRPhiZ/b");
-  tree.Branch("isCartesian", &isCartesian, "isCartesian/b");
+  tree.Branch("isXYZ", &isXYZ, "isXYZ/b");
+  tree.Branch("isEtaPhiR", &isEtaPhiR, "isEtaPhiR/b");
+  tree.Branch("isEtaPhiZ", &isEtaPhiZ, "isEtaPhiZ/b");
+  tree.Branch("isRPhiZ", &isRPhiZ, "isRPhiZ/b");
   tree.Branch("eta", &eta, "eta/d");
   tree.Branch("phi", &phi, "phi/d");
   tree.Branch("r", &r, "r/d");
@@ -136,9 +137,11 @@ StatusCode CreateODDCells::initialize() {
   auto highestVol = gGeoManager->GetTopVolume();
   for (uint iSys = 0; iSys < m_readoutNames.size(); iSys++) {
     isBarrel = m_isBarrel[iSys];
-    isCylindrical = m_isCylindrical[iSys];
-    isECCylindricalRPhiZ = m_isECCylindricalRPhiZ[iSys];
-    isCartesian = m_isCartesian[iSys];
+    isXYZ = m_isXYZ[iSys];
+    isEtaPhiR = m_isEtaPhiR[iSys];
+    isEtaPhiZ = m_isEtaPhiZ[iSys];
+    isRPhiZ = m_isRPhiZ[iSys];
+
     // Check if readouts exist
     info() << "Readout: " << m_readoutNames[iSys] << endmsg;
     if (m_geoSvc->getDetector()->readouts().find(m_readoutNames[iSys]) == m_geoSvc->getDetector()->readouts().end()) {

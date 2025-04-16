@@ -49,12 +49,15 @@ private:
   Gaudi::Property<std::vector<std::string>> m_activeVolumeNames{this, "activeVolumeNames", {"stave_inner:layer:slice4", "stave_inner:layer:slice4", "stave_inner:layer:slice4"}};
   /// If the volume is a barrel: to store in ROOT file
   Gaudi::Property<std::vector<bool>> m_isBarrel{this, "isBarrel", {true, false, false}};
-  /// If the volume is described in eta-cylindrical coordinates ( = r, phi, eta): to store in ROOT file
-  Gaudi::Property<std::vector<bool>> m_isCylindrical{this, "isCylindrical", {false, false, false}};
-  /// If the volume is described in eta-cylindrical coordinates ( = r, phi, z): to store in ROOT file
-  Gaudi::Property<std::vector<bool>> m_isECCylindricalRPhiZ{this, "isECCylindricalRPhiZ", {true, true, true}};
   /// If the volume is described in Cartesian coordinates ( = x, y, z): to store in ROOT file
-  Gaudi::Property<std::vector<bool>> m_isCartesian{this, "isCartesian", {false, false, false}};
+  Gaudi::Property<std::vector<bool>> m_isXYZ{this, "isXYZ", {false, false, false}};
+  /// If the volume is described in eta-cylindrical coordinates ( = r, phi, eta): to store in ROOT file
+  Gaudi::Property<std::vector<bool>> m_isEtaPhiR{this, "isEtaPhiR", {false, false, false}};
+  /// If the volume is described in eta-pih-z coordinates ( = eta, phi, z): to store in ROOT file
+  Gaudi::Property<std::vector<bool>> m_isEtaPhiZ{this, "isEtaPhiZ", {false, false, false}};
+  /// If the volume is described in r-phi-z coordinates ( = r, phi, z): to store in ROOT file
+  Gaudi::Property<std::vector<bool>> m_isRPhiZ{this, "isRPhiZ", {true, true, true}};
+
   /// Name of output file
   std::string m_outputFileName;
 };
