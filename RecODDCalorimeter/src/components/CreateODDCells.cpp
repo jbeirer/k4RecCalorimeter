@@ -105,28 +105,29 @@ StatusCode CreateODDCells::initialize() {
   file->cd();
   TTree tree("cells", "Tree with list of cells");
   dd4hep::DDSegmentation::CellID volumeId;
-  int layer;
+  long long layer;
   bool isBarrel, isXYZ, isEtaPhiR, isEtaPhiZ, isRPhiZ;
   double eta, phi, r, x, y, z, deta, dphi, dr, dx, dy, dz;
-  tree.Branch("id", &volumeId, "id/l");
-  tree.Branch("layer", &layer, "layer/i");
-  tree.Branch("isBarrel", &isBarrel, "isBarrel/b");
-  tree.Branch("isXYZ", &isXYZ, "isXYZ/b");
-  tree.Branch("isEtaPhiR", &isEtaPhiR, "isEtaPhiR/b");
-  tree.Branch("isEtaPhiZ", &isEtaPhiZ, "isEtaPhiZ/b");
-  tree.Branch("isRPhiZ", &isRPhiZ, "isRPhiZ/b");
-  tree.Branch("eta", &eta, "eta/d");
-  tree.Branch("phi", &phi, "phi/d");
-  tree.Branch("r", &r, "r/d");
-  tree.Branch("x", &x, "x/d");
-  tree.Branch("y", &y, "y/d");
-  tree.Branch("z", &z, "z/d");
-  tree.Branch("deta", &deta, "deta/d");
-  tree.Branch("dphi", &dphi, "dphi/d");
-  tree.Branch("dr", &dr, "dr/d");
-  tree.Branch("dx", &dx, "dx/d");
-  tree.Branch("dy", &dy, "dy/d");
-  tree.Branch("dz", &dz, "dz/d");
+  // Modify the branch declarations like this:
+  tree.Branch("id", &volumeId, "id/L");                // int64_t (long long)
+  tree.Branch("layer", &layer, "layer/L");             // int64_t (long long)
+  tree.Branch("isBarrel", &isBarrel, "isBarrel/O");    // bool
+  tree.Branch("isXYZ", &isXYZ, "isXYZ/O");             // bool
+  tree.Branch("isEtaPhiR", &isEtaPhiR, "isEtaPhiR/O"); // bool
+  tree.Branch("isEtaPhiZ", &isEtaPhiZ, "isEtaPhiZ/O"); // bool
+  tree.Branch("isRPhiZ", &isRPhiZ, "isRPhiZ/O");       // bool
+  tree.Branch("eta", &eta, "eta/D");                   // double
+  tree.Branch("phi", &phi, "phi/D");                   // double
+  tree.Branch("r", &r, "r/D");                         // double
+  tree.Branch("x", &x, "x/D");                         // double
+  tree.Branch("y", &y, "y/D");                         // double
+  tree.Branch("z", &z, "z/D");                         // double
+  tree.Branch("deta", &deta, "deta/D");                // double
+  tree.Branch("dphi", &dphi, "dphi/D");                // double
+  tree.Branch("dr", &dr, "dr/D");                      // double
+  tree.Branch("dx", &dx, "dx/D");                      // double
+  tree.Branch("dy", &dy, "dy/D");                      // double
+  tree.Branch("dz", &dz, "dz/D");                      // double
 
   // Initialize the cumulative layer count
   unsigned int totalLayerCount = 0;
@@ -136,11 +137,11 @@ StatusCode CreateODDCells::initialize() {
   // First look up the top volume by name and verify if readout exists
   auto highestVol = gGeoManager->GetTopVolume();
   for (uint iSys = 0; iSys < m_readoutNames.size(); iSys++) {
-    isBarrel = m_isBarrel[iSys];
-    isXYZ = m_isXYZ[iSys];
-    isEtaPhiR = m_isEtaPhiR[iSys];
-    isEtaPhiZ = m_isEtaPhiZ[iSys];
-    isRPhiZ = m_isRPhiZ[iSys];
+    isBarrel = bool(m_isBarrel[iSys]);
+    isXYZ = bool(m_isXYZ[iSys]);
+    isEtaPhiR = bool(m_isEtaPhiR[iSys]);
+    isEtaPhiZ = bool(m_isEtaPhiZ[iSys]);
+    isRPhiZ = bool(m_isRPhiZ[iSys]);
 
     // Check if readouts exist
     info() << "Readout: " << m_readoutNames[iSys] << endmsg;
