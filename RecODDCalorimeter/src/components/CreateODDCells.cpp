@@ -105,29 +105,30 @@ StatusCode CreateODDCells::initialize() {
   file->cd();
   TTree tree("cells", "Tree with list of cells");
   dd4hep::DDSegmentation::CellID volumeId;
-  long long layer;
-  bool isBarrel, isXYZ, isEtaPhiR, isEtaPhiZ, isRPhiZ;
-  double eta, phi, r, x, y, z, deta, dphi, dr, dx, dy, dz;
-  // Modify the branch declarations like this:
-  tree.Branch("id", &volumeId, "id/L");                // int64_t (long long)
-  tree.Branch("layer", &layer, "layer/L");             // int64_t (long long)
-  tree.Branch("isBarrel", &isBarrel, "isBarrel/O");    // bool
-  tree.Branch("isXYZ", &isXYZ, "isXYZ/O");             // bool
-  tree.Branch("isEtaPhiR", &isEtaPhiR, "isEtaPhiR/O"); // bool
-  tree.Branch("isEtaPhiZ", &isEtaPhiZ, "isEtaPhiZ/O"); // bool
-  tree.Branch("isRPhiZ", &isRPhiZ, "isRPhiZ/O");       // bool
-  tree.Branch("eta", &eta, "eta/D");                   // double
-  tree.Branch("phi", &phi, "phi/D");                   // double
-  tree.Branch("r", &r, "r/D");                         // double
-  tree.Branch("x", &x, "x/D");                         // double
-  tree.Branch("y", &y, "y/D");                         // double
-  tree.Branch("z", &z, "z/D");                         // double
-  tree.Branch("deta", &deta, "deta/D");                // double
-  tree.Branch("dphi", &dphi, "dphi/D");                // double
-  tree.Branch("dr", &dr, "dr/D");                      // double
-  tree.Branch("dx", &dx, "dx/D");                      // double
-  tree.Branch("dy", &dy, "dy/D");                      // double
-  tree.Branch("dz", &dz, "dz/D");                      // double
+  unsigned int layer;
+  bool isBarrel, isXYZ, isEtaPhiR, isEtaPhiZ, isRPhiZ;  
+  float eta, phi, r, x, y, z, deta, dphi, dr, dx, dy, dz; 
+  
+  // Total cell number: 130,954,272
+  tree.Branch("id", &volumeId, "id/l");                // 8 bytes (unsigned long long - uint64_t)
+  tree.Branch("layer", &layer, "layer/i");             // 4 bytes (unsigned int - uint32_t)
+  tree.Branch("isBarrel", &isBarrel, "isBarrel/O");    // 1 byte (bool)
+  tree.Branch("isXYZ", &isXYZ, "isXYZ/O");             // 1 byte (bool)
+  tree.Branch("isEtaPhiR", &isEtaPhiR, "isEtaPhiR/O"); // 1 byte (bool)
+  tree.Branch("isEtaPhiZ", &isEtaPhiZ, "isEtaPhiZ/O"); // 1 byte (bool)
+  tree.Branch("isRPhiZ", &isRPhiZ, "isRPhiZ/O");       // 1 byte (bool)
+  tree.Branch("eta", &eta, "eta/F");                   // 4 bytes (float)
+  tree.Branch("phi", &phi, "phi/F");                   // 4 bytes (float)
+  tree.Branch("r", &r, "r/F");                         // 4 bytes (float)
+  tree.Branch("x", &x, "x/F");                         // 4 bytes (float)
+  tree.Branch("y", &y, "y/F");                         // 4 bytes (float)
+  tree.Branch("z", &z, "z/F");                         // 4 bytes (float)
+  tree.Branch("deta", &deta, "deta/F");                // 4 bytes (float)
+  tree.Branch("dphi", &dphi, "dphi/F");                // 4 bytes (float)
+  tree.Branch("dr", &dr, "dr/F");                      // 4 bytes (float)
+  tree.Branch("dx", &dx, "dx/F");                      // 4 bytes (float)
+  tree.Branch("dy", &dy, "dy/F");                      // 4 bytes (float)
+  tree.Branch("dz", &dz, "dz/F");                      // 4 bytes (float)
 
   // Initialize the cumulative layer count
   unsigned int totalLayerCount = 0;
